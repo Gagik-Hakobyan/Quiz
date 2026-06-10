@@ -1,0 +1,121 @@
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+}
+
+.aside {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  padding: var(--space-7);
+  background: linear-gradient(150deg, #221d4d 0%, #3a2f8f 55%, #5a45e6 100%);
+  color: #fff;
+  overflow: hidden;
+}
+.asideTop {
+  position: relative;
+  z-index: 1;
+  filter: brightness(0) invert(1);
+}
+.asideBody {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  max-width: 440px;
+}
+.tagline {
+  font-size: var(--text-4xl);
+  color: #fff;
+  line-height: 1.1;
+}
+.tagline span {
+  color: var(--color-accent-400);
+}
+.asideLead {
+  margin-top: var(--space-4);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--text-lg);
+}
+.highlights {
+  margin-top: var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.highlight {
+  display: flex;
+  gap: var(--space-4);
+}
+.highlightIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.highlight strong {
+  display: block;
+  font-weight: 700;
+}
+.highlightText {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: var(--text-sm);
+}
+.glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  right: -120px;
+  bottom: -160px;
+  background: radial-gradient(circle, rgba(52, 211, 183, 0.45), transparent 60%);
+  filter: blur(20px);
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--color-bg);
+}
+.card {
+  width: 100%;
+  max-width: 420px;
+}
+.mobileLogo {
+  margin-bottom: var(--space-6);
+}
+.header {
+  margin-bottom: var(--space-6);
+}
+.title {
+  font-size: var(--text-3xl);
+}
+.subtitle {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+.footer {
+  margin-top: var(--space-6);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 960px) {
+  .wrap {
+    grid-template-columns: 1.05fr 1fr;
+  }
+  .aside {
+    display: flex;
+  }
+  .mobileLogo {
+    display: none;
+  }
+}

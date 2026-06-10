@@ -1,0 +1,28 @@
+.toolbar {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  gap: 20px;
+  min-width: 220px;
+}
+.statusSelect {
+  min-width: 180px;
+}
+.titleLink {
+  font-weight: 600;
+  color: var(--color-text-strong);
+}
+.titleLink:hover {
+  color: var(--color-primary-700);
+  text-decoration: none;
+}
+.pager {
+  padding: var(--space-4);
+}

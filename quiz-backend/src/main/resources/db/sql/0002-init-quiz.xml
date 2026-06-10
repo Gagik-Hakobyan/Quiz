@@ -1,0 +1,35 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0002-init-quiz" author="ghakobyan">
+        <createTable tableName="quiz">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description" type="text"/>
+
+            <column name="status" type="varchar(20)"  defaultValue="UNPUBLISHED">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_by" type="bigint">
+                <constraints
+                        foreignKeyName="fk_quiz_user"
+                        referencedTableName="users"
+                        referencedColumnNames="id"
+                        nullable="false"/>
+            </column>
+
+            <column name="created_date" type="timestamp" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

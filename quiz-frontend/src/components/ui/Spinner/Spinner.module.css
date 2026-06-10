@@ -1,0 +1,8 @@
+.spinner {
+  display: inline-block;
+  border-style: solid;
+  border-color: currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
