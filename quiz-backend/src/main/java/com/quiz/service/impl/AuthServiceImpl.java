@@ -14,6 +14,7 @@ import com.quiz.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -27,27 +28,10 @@ public class AuthServiceImpl implements AuthService {
     private final MailService mailService;
     private final UserMapper userMapper;
 
-    @Override
-    public UserResponseDto register(UserSaveDto userSaveDto) {
-        if (userRepository.findByEmail(userSaveDto.getEmail()).isPresent()) {
-            throw new AlreadyExistsException("User by email: " + userSaveDto.getEmail() + " already exists");
-        }
-
-        User user = userMapper.toEntity(userSaveDto);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setVerifyToken(generateUtil.generate(6));
-        userRepository.save(user);
-
-        mailService.sendVerificationMail(
-                user.getEmail(),
-                "Account Verification",
-                String.format(
-                        "Dear %s welcome, you have successfully registered to our website, " +
-                                "your verification code is %s",
-                        user.getName(), user.getVerifyToken()));
-
-        return userMapper.toDto(user);
-    }
+    private static final int VERIFY_TOKEN_LENGTH = 6;
+    private static final String VERIFICATION_SUBJECT = "Account Verification";
+    private static final String VERIFICATION_TEMPLATE =
+            "Dear %s welcome, you have successfully registered to our website, your verification code is %s";
 
     @Override
     public void verify(String token) {
@@ -64,10 +48,29 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public UserResponseDto register(UserSaveDto userSaveDto) {
+        if (userRepository.findByEmail(userSaveDto.getEmail()).isPresent()) {
+            throw new AlreadyExistsException("User by email: " + userSaveDto.getEmail() + " already exists");
+        }
+
+        User user = userMapper.toEntity(userSaveDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setVerifyToken(generateUtil.generate(VERIFY_TOKEN_LENGTH));
+        userRepository.save(user);
+
+        mailService.sendVerificationMail(
+                user.getEmail(),
+                VERIFICATION_SUBJECT,
+                String.format(VERIFICATION_TEMPLATE, user.getName(), user.getVerifyToken()));
+
+        return userMapper.toDto(user);
+    }
+
+    @Override
     public AuthResponseDto login(AuthRequestDto authRequestDto) {
         User user = userRepository.findByEmail(authRequestDto.getEmail()).orElseThrow(() ->
                 new IllegalArgumentException("Invalid email or password")
-                );
+        );
 
         if (!passwordEncoder.matches(authRequestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password");
@@ -77,9 +80,9 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalStateException("User is not verified");
         }
 
-       return AuthResponseDto.builder()
-               .token(tokenUtil.generateToken(user.getEmail()))
-               .userResponseDto(userMapper.toDto(user))
-               .build();
+        return AuthResponseDto.builder()
+                .token(tokenUtil.generateToken(user.getEmail()))
+                .userResponseDto(userMapper.toDto(user))
+                .build();
     }
 }

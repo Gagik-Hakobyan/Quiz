@@ -85,7 +85,7 @@ public class UserController {
 
     @PostMapping("/attempts/{id}/submit")
     public ResponseEntity<AttemptResponseDto> submitAttempt(
-            @PathVariable @NotNull @Min(value = 0, message = "Quiz Id must be at least 0") long id,
+            @PathVariable @NotNull @Min(value = 0, message = "Attempt Id must be at least 0") long id,
             @RequestBody @Validated AttemptRequestDto attemptRequestDto,
             Authentication authentication
     ) {
